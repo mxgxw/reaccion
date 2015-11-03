@@ -1,0 +1,7 @@
+﻿Versión 0.01
+===========================
+Publicada: 12/01/14
+
+Cambios:
+
+* Agregados esquematicos e ingresada plantilla OSHW

@@ -1,0 +1,10 @@
+# de parte del proveedor,Nombre,Descripción,Proveedor,Cantidad,Unidad medida,Precio Unitario,Total
+PRT-0001,ATmega328 with Arduino Optiboot (Uno),Microcontrolador con bootloader pre-grabado para compatibilidad con Arduino.,SparkFun,1,Unidad,-,#VALOR!
+MmsmartGSM,PROPOX MmsmartGSM,Módulo Módem GSM cuadribanda.,PROPOX,1,Unidad,-,#VALOR!
+602-1349-ND,XBEE PRO S3B 900HP RPSMA,Módulo de transmisión inalambrica para redes tipo MESH.,DigiKey,1,Unidad,-,#VALOR!
+PRT-11231,Power Cell - LiPo Charger/Booster,Módulo para carga/nivelación de voltaje para baterías Ion Litio.,SparkFun,1,Unidad,-,#VALOR!
+PRT-08483,Polymer Lithium Ion Battery - 2000mAh,Batería de Ion Litio 2000mAh,SparkFun,1,Unidad,-,#VALOR!
+COM-00538,Crystal 8MHz,Cristal PiezoElectrico de 8MHz,SparkFun,1,Unidad,-,#VALOR!
+COM-08571,Capacitor Ceramic 22pF,Capacitor cerámico de 22pF,SparkFun,2,Unidad,-,#VALOR!
+COM-08375 ,Capacitor Ceramic 0.1uF,Capacitor cerámico de 0.1uF,SparkFun,1,Unidad,-,#VALOR!
+COM-00097, Mini Push Button Switch,Botón Pulsador,SparkFun,1,Unidad,-,#VALOR!

@@ -1,0 +1,240 @@
+Introducción
+============
+
+Este documento pretende servir como una guía para explicar el
+las razones detrás de la tecnología utilizada en Reacción.net.
+
+Antes de revisar o modificar el diseño es recomendable leer
+esta guía para tener una visión más clara de las limitaciones
+de conectividad y uso que podría tener la plataforma en una
+situación real de implementación.
+
+El escenario
+============
+
+Al momento de ocurrir una emergencia, los redes de comunicaciones
+son usualmente las primeras afectadas ya sea porque han sido
+dañadas o destruidas por el evento o por saturación de las mismas
+por los propios usuarios.
+
+Para el caso de El Salvador las redes de comunicaciones de datos
+usualmente solo están disponibles en las áreas más urbanizadas,
+si bien existe una extensa red móvil de comunicaciones las últimas
+estadísticas apuntan a casi 3 dispositivos móviles por habitante,
+en una emergencia lo primero que las personas suelen hacer es
+intentar comunicarse con su familia o personas cercanas saturando
+la red de comunicaciones móviles.
+
+En los últimos años las soluciones basadas en "la nube" se han
+vuelto muy de moda, a pesar de tener excepcionales características
+en capacidad de procesamiento y disponibilidad, para ser usables
+requieren de una infraestructura de comunicaciones funcional,
+haciendolas poco viables al momento de una emergencia a menos que
+se invierta previamente en la creación de una infraestructura
+muy resiliente a los desastres.
+
+Diseño no intrusivo
+===================
+
+En una emergencia, la prioridad de las personas es primero velar
+por su propia seguridad. Y luego, una vez esto se ha logrado, en
+la medida de lo posible deberían ayudar a otras
+personas que necesitan auxilio.
+
+La primera respuesta nunca viene de un equipo especializado de
+rescate, ni del gobierno, ni de un organismo internacional. La
+primera respuesta es la propia gente en el lugar que ha ocurrido
+un desastre dando palabras de aliento y ayudando a mantener la
+calma a las personas afectadas en tanto llega la ayuda.
+
+Por ello, cualquier diseño de un dispositivo para emergencias
+debe de ser en la medida de lo posible no intrusivo permitiendo
+a la gente concentrarse en la emergencia y no en el aparato.
+
+Las vidas se salvan antes, no después
+=====================================
+
+El secreto está en la prevención, la alerta temprana y en la
+organización de las comunidades. Si esto no existe se cae en
+el error de ser reaccionarios y actuar luego de una catástrofe
+donde ya poco o nada puede hacerse.
+
+Mensajes cortos, simples, claros y fáciles de entender
+======================================================
+
+En emergencias, vale más un mensaje corto con un significado
+bien definido que miles de mensajes con información vaga y poco
+precisa. Sin embargo la combinación de ambos también puede dar
+lugar a una gran cantidad de información valiosa en emergencias.
+
+Reacción.net se centra en el primer tipo de mensajes y para ello
+fundamenta su metodo de operación en los planes de emergencia
+comunitarios.
+
+Así por ejemplo, una comunidad podría acordar que "naranja"
+indica en el plan de emergencia que el evento ha afectado más
+de la mitad de la población.
+
+De esta manera un "color" se vuelve un mensaje claro, previamente
+acordado que acarrea una gran cantidad de información. No pretende
+en ningún momento ser preciso, pero nos da una idea más clara
+de la situación y es más rápido que intentar obtener un detalle
+preciso luego de la emergencia.
+
+Pensamos que el detalle es tarea de las Evaluaciones de Daños,
+mientras tanto la pregunta es ¿A donde focalizar las evaluaciones?
+¿Quienes podrían necesitar ayuda inmediata? ¿A donde comenzar a
+intervenir? El equipo pretende ayudar a responder estas preguntas
+en las primeras horas luego de ocurrido un evento.
+
+Pérdida de la memoria
+=====================
+
+En una emergencia, uno de los problemas más graves es la pérdida
+de la memoria de lo ocurrido. En un desastre de grandes proporciones
+es necesario que los investigadores realizen un trabajo forense
+para tratar de determinar qué fué lo que sucedio.
+
+Reacción.net provee de un registro distribuido de eventos, de tal
+manera que todos los nodos guardan información de la situación
+de la red.
+
+De esta manera aunque se perdieran todos los nodos menos uno, sería
+posible regresar en el tiempo y conocer qué fué lo que ocurrió como
+ocurre en las cajas negras de los aviones.
+
+Adicionalmente el sistema está diseñado de tal manera que se pueda
+sincronizar automáticamente al momento de conectarse a la red, de
+tal manera que todos los nodos pueden conocer la información de los
+demás.
+
+Consideraciones técnicas
+========================
+
+Tomando en cuenta todo lo anterior, es posible definir los
+parámetros de funcionamiento básico que deberá poseer el
+dispositivo:
+
+   1 - El dispositivo debe basar su funcionamiento en la interacción
+       con la gente, no algo por encima de o que reemplace a la gente.
+   2 - El canal de transmisión de datos no debe de ser centralizado
+       y/o depender de infraestructura existente.
+   3 - El canal de transmisión de datos secundario puede depender
+       de infraestructura existente pero no debe de ser un requerimiento
+       para el funcionamiento del dispositivo.
+   4 - Cada nodo debe poseer medios para conocer su ubicación.
+   5 - Cada nodo debe poseer un registro de los eventos de la red
+       a la que se encuentra asociado.
+   6 - La interfaz debe ser minimalista, orientada a una función 
+       específica y no-intrusiva.
+   7 - Infraestructura libre, replicable y adaptable por los usuarios, 
+       siguiendo la filosofía del Hardware de Fuentes Abiertas.
+
+En base a lo anterior se ha elegido la siguiente tecnología para
+su funcionamiento:
+
+1 - Basado en la gente: Si bien este no es un requerimiento técnico, el
+equipo se basa en los planes de emergencia existentes, cada función del
+aparto esta asociada a una acción determinada por el plan de emergencia
+comunitario. No hay un mensaje "estándar" sino un mutuo acuerdo entre
+las comunidades participantes y una organización previa.
+
+2 - Canal primario:
+
+Para proveer de conectividad  se han elegido los módulos de transmisión
+de datos inalambricos de tipo espectro ensanchado XBee DIGIMESH 900HP,
+estos transmisores son capaces de establecer redes malladas totalmente
+descentralizadas y proveen rangos de transmisión aceptables (entre
+660m y 6Km). Estos módulos se encargan de manejar todo el protocolo
+de transmisión a bajo nivel permitiendo al diseñador centrarse en las
+funciones de la aplicación específica más que en los detalles de la capa
+de red de comunicaciones. La desventaja de estos módulos es que trabajan
+con un ancho de banda muy limitado (entre 10Kbps y 200Kbps) en una banda
+de transmisión de datos regulada en la mayor parte del mundo.
+
+Partiendo de que el sistema se basa en la transmisión de datos simples,
+previamente acordados el ancho de banda no debería representar mayor 
+problema. Respecto al licenciamiento de los equipos creemos posible
+que para el tipo de aplicación que se desea implementar se pueden obtener
+las autorizaciones o licenciamientos correspondientes según
+sea el caso.
+
+3 - Canal secundario:
+
+Se ha elegido el módulo de tranmisión de datos sobre la red GSM GPRS
+PROPOX MMsmartGSM por su bajo costo y por estar basado en el chip SIM900,
+este chip posee una hoja de especificaciones fácilmente accesible y
+provee de la funcionalidad de "celular en un chip". Adicionalmente
+cuenta con un stack TCP/IP integrado accesible desde sencillos comandos
+AT vía Serial por lo que "descarga" el trabajo de establecimiento de
+conexión y envio de datos al miscroprocesador principal el kit Reaccion.net.
+
+Sin embargo, no pensamos que un canal secundario GSM GPRS sea la solución
+final a todo. En futuras versiones se podría intercambiar por un módulo
+WiFI o alguna solución de acceso a internét móvil como WiMAX o similares.
+
+4 - Medios de ubicación:
+
+Se ha elegido el módulo SkyLab SKM53, este es un módulo GSM con antena
+cerámica integrada y salida de comunicaciones serial. La salida es
+estándar NMEA y es de bajo muy coste.
+
+
+5 - Almacenamiento:
+
+El módulo implementa un protocolo que permite el sincronizado remoto, se
+da prioridad al nodo con el mensaje más nuevo y los nodos con información
+más antigua se intentan actualizar solicitando los datos al nodo con
+información más reciente.
+
+Para el almacenamiento interno se han elegido memorias del tipo SD, el
+protocolo debería garantizar también la integridad de los datos y proveer
+algún medio de recuperación, se espera que la estructura P2P ayude a cum
+plir con este cometido.
+
+6 - Interfaz de usuario:
+
+Un pequeño display LCD, un buzzer de alarma sonora y un teclado de 9 teclas
+compondrán la interfaz de usuario. Se utilizará un micro-controlador por
+separado para administrar la interfaz de usuario y el despliegue de mensajes.
+
+7 - Infraestructura libre y replicable:
+
+Se ha decidido utilizar dos microcontroladores Amtel AVR por el motivo de
+hacerlo compatible con la plataforma Arduino y fomentar el mejoramiento
+y adaptación de la plataforma a las necesidades locales.
+
+Los procesadores AVR son también de bajo costo, si bien su funcionalidad
+puede resultar limitada, gracias a la plataforma Arduino son ampliamente
+disponibles a muy bajo costo.
+
+El sistema posee dos microcontroladores, un ATmega1280 que se encargará
+de mantener los protocolos de comunicaciones. Se ha elegido este
+microcontrolador por poseer 4 puertos USART por hardware, la idea de
+utilizar USART es que la implementación será fácilmente adaptable que
+utilizando un bus inter-chip, aunque no es una regla estricta. Es muy
+posible que en futuras versiones de reaccion.net con un microcontrolador
+de mayor capacidad de procesamiento sea mucho más factible utilizar un
+bus de comuncación inter-chip como I2C o SPI.
+
+El Segundo microcontrolador se encargará de manejar la interfaz de usuario,
+una de las principales razones para elegir este modo de trabajo era para
+"aislar" por completo los bloques funcionales, así un bug en la interfaz
+de usuario no debería afectar el módulo de comunicaciones y viceversa.
+
+Además esto permitirá mejorar la interfaz de usuario sin necesidad de
+modificar el protocolo de comunicación de red.
+
+Fuente de alimentación y consumo
+================================
+
+El sistema cuenta con un cargador/nivelador de voltaje que trabajará a
+3.3V para los ATmega, el XBee y el GPS y conectará el módulo GSM
+directamente a la batería del tipo Ión-Litio/Polímero.
+
+Se espera que el sistema se encuentre en modo de escucha la mayor parte
+del tiempo, esto con el objetivo de aumentar la autonomía con baterías.
+
+Para el prototipo incial se espera que se pueda tener una autonomía
+de unas 12 horas aunque se espera que para la versión final se pueda
+cubrir el rango completo de las 72 horas luego de una emergencia.
