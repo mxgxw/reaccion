@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.01" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -10540,13 +10540,6 @@ SUPPLY</text>
 <pinref part="C11" gate="G$1" pin="2"/>
 <wire x1="72.644" y1="-104.902" x2="80.01" y2="-104.902" width="0.1524" layer="91"/>
 <wire x1="80.01" y1="-104.902" x2="80.01" y2="-105.918" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$14" class="0">
-<segment>
-<wire x1="172.72" y1="-248.92" x2="167.64" y2="-248.92" width="0.1524" layer="91"/>
-<label x="167.64" y="-248.92" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="IC_12" gate="G$1" pin="29"/>
 </segment>
 </net>
 </nets>
