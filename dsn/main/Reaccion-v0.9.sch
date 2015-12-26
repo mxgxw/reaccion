@@ -7470,37 +7470,6 @@ Various common sizes : AA, AAA, 18650 (PRT-12895), 20mm coin cell and 12mm coin 
 <text x="-2.02" y="2.08" size="1.778" layer="25" font="fixed">&gt;NAME</text>
 <text x="-1.9" y="-3.35" size="1.778" layer="27" font="fixed">&gt;VALUE</text>
 </package>
-<package name="2X2-DFN">
-<smd name="1" x="-0.8975" y="0.8" dx="0.6" dy="0.225" layer="1"/>
-<smd name="2" x="-0.8975" y="0.4" dx="0.6" dy="0.225" layer="1"/>
-<smd name="3" x="-0.8975" y="0" dx="0.6" dy="0.225" layer="1"/>
-<smd name="4" x="-0.8975" y="-0.4" dx="0.6" dy="0.225" layer="1"/>
-<smd name="5" x="-0.8975" y="-0.8" dx="0.6" dy="0.225" layer="1"/>
-<smd name="6" x="0.8975" y="-0.8" dx="0.6" dy="0.225" layer="1"/>
-<smd name="7" x="0.8975" y="-0.4" dx="0.6" dy="0.225" layer="1"/>
-<smd name="8" x="0.8975" y="0" dx="0.6" dy="0.225" layer="1"/>
-<smd name="9" x="0.8975" y="0.4" dx="0.6" dy="0.225" layer="1"/>
-<smd name="10" x="0.8975" y="0.8" dx="0.6" dy="0.225" layer="1"/>
-<polygon width="0.127" layer="29">
-<vertex x="-1.2625" y="0.975"/>
-<vertex x="-0.5375" y="0.975"/>
-<vertex x="-0.5375" y="-0.975"/>
-<vertex x="-1.2625" y="-0.975"/>
-</polygon>
-<polygon width="0.127" layer="29">
-<vertex x="0.5375" y="0.975"/>
-<vertex x="1.2625" y="0.975"/>
-<vertex x="1.2625" y="-0.975"/>
-<vertex x="0.5375" y="-0.975"/>
-</polygon>
-<wire x1="-1" y1="-1" x2="1" y2="-1" width="0.127" layer="21"/>
-<wire x1="1" y1="-1" x2="1" y2="1" width="0.127" layer="21"/>
-<wire x1="1" y1="1" x2="-1" y2="1" width="0.127" layer="21"/>
-<wire x1="-1" y1="1" x2="-1" y2="-1" width="0.127" layer="21"/>
-<text x="-0.98" y="0.99" size="0.4064" layer="21">*</text>
-<text x="-0.5" y="1.15" size="0.4064" layer="21">&gt;Name</text>
-<text x="-0.45" y="-1.55" size="0.4064" layer="21">&gt;Value</text>
-</package>
 </packages>
 <symbols>
 <symbol name="MS5637-02BA03">
@@ -7513,23 +7482,6 @@ Various common sizes : AA, AAA, 18650 (PRT-12895), 20mm coin cell and 12mm coin 
 <wire x1="2.54" y1="-12.7" x2="-15.24" y2="-12.7" width="0.254" layer="94"/>
 <wire x1="-15.24" y1="-12.7" x2="-15.24" y2="12.7" width="0.254" layer="94"/>
 <text x="-10.16" y="-10.16" size="1.778" layer="94" font="fixed" rot="R90">MS5637-02BA03</text>
-</symbol>
-<symbol name="MMA8653FC">
-<pin name="VDD" x="-15.24" y="5.08" length="middle"/>
-<pin name="SCL" x="-15.24" y="2.54" length="middle"/>
-<pin name="INT1" x="-15.24" y="0" length="middle"/>
-<pin name="BYP" x="-15.24" y="-2.54" length="middle"/>
-<pin name="INT2" x="-15.24" y="-5.08" length="middle"/>
-<pin name="GND1" x="15.24" y="-5.08" length="middle" rot="R180"/>
-<pin name="GND2" x="15.24" y="-2.54" length="middle" rot="R180"/>
-<pin name="VDDIO" x="15.24" y="0" length="middle" rot="R180"/>
-<pin name="GND" x="15.24" y="2.54" length="middle" rot="R180"/>
-<pin name="SDA" x="15.24" y="5.08" length="middle" rot="R180"/>
-<wire x1="10.16" y1="-7.62" x2="10.16" y2="7.62" width="0.254" layer="94"/>
-<wire x1="10.16" y1="7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="-7.62" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
-<text x="-10.16" y="7.62" size="1.778" layer="97">MMA8653FC</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -7544,30 +7496,6 @@ Various common sizes : AA, AAA, 18650 (PRT-12895), 20mm coin cell and 12mm coin 
 <connect gate="G$1" pin="SCL" pad="3"/>
 <connect gate="G$1" pin="SDA" pad="2"/>
 <connect gate="G$1" pin="VCC" pad="1"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="MMA8653FC">
-<gates>
-<gate name="G$1" symbol="MMA8653FC" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="2X2-DFN">
-<connects>
-<connect gate="G$1" pin="BYP" pad="4"/>
-<connect gate="G$1" pin="GND" pad="8"/>
-<connect gate="G$1" pin="GND1" pad="6"/>
-<connect gate="G$1" pin="GND2" pad="7"/>
-<connect gate="G$1" pin="INT1" pad="3"/>
-<connect gate="G$1" pin="INT2" pad="5"/>
-<connect gate="G$1" pin="SCL" pad="2"/>
-<connect gate="G$1" pin="SDA" pad="10"/>
-<connect gate="G$1" pin="VDD" pad="1"/>
-<connect gate="G$1" pin="VDDIO" pad="9"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -7959,6 +7887,86 @@ Standard 3.3V and 5V 500mA LDO voltage regulator in SOT-23 layout. Micrel part M
 </deviceset>
 </devicesets>
 </library>
+<library name="Reaccion-Custom-revised">
+<packages>
+<package name="2X2-DFN">
+<wire x1="-1" y1="-1" x2="1" y2="-1" width="0.127" layer="21"/>
+<wire x1="1" y1="-1" x2="1" y2="1" width="0.127" layer="21"/>
+<wire x1="1" y1="1" x2="-1" y2="1" width="0.127" layer="21"/>
+<wire x1="-1" y1="1" x2="-1" y2="-1" width="0.127" layer="21"/>
+<smd name="1" x="-0.8975" y="0.8" dx="0.6" dy="0.225" layer="1"/>
+<smd name="2" x="-0.8975" y="0.4" dx="0.6" dy="0.225" layer="1"/>
+<smd name="3" x="-0.8975" y="0" dx="0.6" dy="0.225" layer="1"/>
+<smd name="4" x="-0.8975" y="-0.4" dx="0.6" dy="0.225" layer="1"/>
+<smd name="5" x="-0.8975" y="-0.8" dx="0.6" dy="0.225" layer="1"/>
+<smd name="6" x="0.8975" y="-0.8" dx="0.6" dy="0.225" layer="1"/>
+<smd name="7" x="0.8975" y="-0.4" dx="0.6" dy="0.225" layer="1"/>
+<smd name="8" x="0.8975" y="0" dx="0.6" dy="0.225" layer="1"/>
+<smd name="9" x="0.8975" y="0.4" dx="0.6" dy="0.225" layer="1"/>
+<smd name="10" x="0.8975" y="0.8" dx="0.6" dy="0.225" layer="1"/>
+<text x="-0.98" y="0.99" size="0.4064" layer="21">*</text>
+<text x="-0.5" y="1.15" size="0.4064" layer="21">&gt;Name</text>
+<text x="-0.45" y="-1.55" size="0.4064" layer="21">&gt;Value</text>
+<polygon width="0.127" layer="29">
+<vertex x="-1.2625" y="0.975"/>
+<vertex x="-0.5375" y="0.975"/>
+<vertex x="-0.5375" y="-0.975"/>
+<vertex x="-1.2625" y="-0.975"/>
+</polygon>
+<polygon width="0.127" layer="29">
+<vertex x="0.5375" y="0.975"/>
+<vertex x="1.2625" y="0.975"/>
+<vertex x="1.2625" y="-0.975"/>
+<vertex x="0.5375" y="-0.975"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="MMA8653FC">
+<wire x1="10.16" y1="-7.62" x2="10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="10.16" y1="7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-7.62" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
+<pin name="BYP" x="-15.24" y="-2.54" length="middle"/>
+<pin name="GND" x="15.24" y="2.54" length="middle" rot="R180"/>
+<pin name="GND1" x="15.24" y="-5.08" length="middle" rot="R180"/>
+<pin name="GND2" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="INT1" x="-15.24" y="0" length="middle"/>
+<pin name="INT2" x="-15.24" y="-5.08" length="middle"/>
+<pin name="SCL" x="-15.24" y="2.54" length="middle"/>
+<pin name="SDA" x="15.24" y="5.08" length="middle" rot="R180"/>
+<pin name="VDD" x="-15.24" y="5.08" length="middle"/>
+<pin name="VDDIO" x="15.24" y="0" length="middle" rot="R180"/>
+<text x="-10.16" y="7.62" size="1.778" layer="97">MMA8653FC</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="MMA8653FC">
+<gates>
+<gate name="G$1" symbol="MMA8653FC" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="2X2-DFN">
+<connects>
+<connect gate="G$1" pin="BYP" pad="4"/>
+<connect gate="G$1" pin="GND" pad="9"/>
+<connect gate="G$1" pin="GND1" pad="6"/>
+<connect gate="G$1" pin="GND2" pad="7"/>
+<connect gate="G$1" pin="INT1" pad="3"/>
+<connect gate="G$1" pin="INT2" pad="5"/>
+<connect gate="G$1" pin="SCL" pad="2"/>
+<connect gate="G$1" pin="SDA" pad="10"/>
+<connect gate="G$1" pin="VDD" pad="1"/>
+<connect gate="G$1" pin="VDDIO" pad="8"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -8077,7 +8085,7 @@ Standard 3.3V and 5V 500mA LDO voltage regulator in SOT-23 layout. Micrel part M
 <part name="BUZZER" library="SparkFun-Connectors" deviceset="M02" device="-JST-2-PTH-NO_SILK" value="BATT"/>
 <part name="GND53" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="IC_8" library="Reaccion-Custom" deviceset="MS5637-02BA03" device=""/>
-<part name="IC_7" library="Reaccion-Custom" deviceset="MMA8653FC" device=""/>
+<part name="IC_7" library="Reaccion-Custom-revised" deviceset="MMA8653FC" device=""/>
 <part name="GND35" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND54" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="C24" library="SparkFun-Capacitors" deviceset="CAP" device="0805" value="1uF"/>
@@ -9108,6 +9116,11 @@ SUPPLY</text>
 <label x="150.876" y="-12.446" size="1.27" layer="95" xref="yes"/>
 <junction x="148.336" y="-12.446"/>
 </segment>
+<segment>
+<pinref part="IC_13" gate="G$1" pin="P1"/>
+<wire x1="213.614" y1="-310.896" x2="218.694" y2="-310.896" width="0.1524" layer="91"/>
+<label x="218.948" y="-310.896" size="1.27" layer="95" xref="yes"/>
+</segment>
 </net>
 <net name="N$11" class="0">
 <segment>
@@ -9196,6 +9209,11 @@ SUPPLY</text>
 <wire x1="148.336" y1="-9.906" x2="150.876" y2="-9.906" width="0.1524" layer="91"/>
 <label x="150.876" y="-9.906" size="1.27" layer="95" xref="yes"/>
 <junction x="148.336" y="-9.906"/>
+</segment>
+<segment>
+<pinref part="IC_13" gate="G$1" pin="P0"/>
+<wire x1="213.614" y1="-313.436" x2="218.694" y2="-313.436" width="0.1524" layer="91"/>
+<label x="218.694" y="-313.436" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="N$13" class="0">
@@ -9786,9 +9804,9 @@ SUPPLY</text>
 <junction x="8.89" y="-163.83"/>
 </segment>
 <segment>
-<pinref part="IC_12" gate="G$1" pin="21/A7"/>
-<wire x1="203.2" y1="-243.84" x2="208.28" y2="-243.84" width="0.1524" layer="91"/>
-<label x="208.28" y="-243.84" size="1.27" layer="95" xref="yes"/>
+<pinref part="IC_12" gate="G$1" pin="25"/>
+<wire x1="172.72" y1="-238.76" x2="167.64" y2="-238.76" width="0.1524" layer="91"/>
+<label x="167.64" y="-238.76" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="SIM900_PWR" class="0">
@@ -9953,9 +9971,9 @@ SUPPLY</text>
 <label x="243.84" y="-180.34" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="IC_12" gate="G$1" pin="24"/>
-<wire x1="172.72" y1="-236.22" x2="167.64" y2="-236.22" width="0.1524" layer="91"/>
-<label x="167.64" y="-236.22" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IC_12" gate="G$1" pin="20/A6"/>
+<wire x1="203.2" y1="-246.38" x2="208.28" y2="-246.38" width="0.1524" layer="91"/>
+<label x="208.28" y="-246.38" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="BT_RX" class="0">
@@ -9965,9 +9983,9 @@ SUPPLY</text>
 <label x="243.84" y="-182.88" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="IC_12" gate="G$1" pin="25"/>
-<wire x1="172.72" y1="-238.76" x2="167.64" y2="-238.76" width="0.1524" layer="91"/>
-<label x="167.64" y="-238.76" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IC_12" gate="G$1" pin="21/A7"/>
+<wire x1="203.2" y1="-243.84" x2="208.28" y2="-243.84" width="0.1524" layer="91"/>
+<label x="208.28" y="-243.84" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="BT_CMD" class="0">
@@ -10085,9 +10103,9 @@ SUPPLY</text>
 <label x="93.98" y="-381" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="IC_12" gate="G$1" pin="20/A6"/>
-<wire x1="203.2" y1="-246.38" x2="208.28" y2="-246.38" width="0.1524" layer="91"/>
-<label x="208.28" y="-246.38" size="1.27" layer="95" xref="yes"/>
+<pinref part="IC_12" gate="G$1" pin="24"/>
+<wire x1="172.72" y1="-236.22" x2="167.64" y2="-236.22" width="0.1524" layer="91"/>
+<label x="167.64" y="-236.22" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="SPI1_SCK" class="0">

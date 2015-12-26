@@ -1,88 +1,151 @@
-/*************************************************************
-Reaccion.net connectivity board for Arduino.
-Copyright (C) 2014  Mario Gomez/mxgxw < mario.gomez _at- teubi.co >
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-**************************************************************/
-#define FILE_NAME "DATALOG.TXT"
-
-// Global include section
-#include <stdlib.h>
 #include <SPI.h>
-//#include <Fat16.h>
-#include <SdFat.h>
-#include <HardwareSerial.h>
+#include <Wire.h>
 #include <SoftwareSerial.h>
-#include <inttypes.h>
-#include <NMEAGPS_cfg.h>
-#include <NMEAGPS.h>
-
-// Local include section
-#include "Adafruit_ILI9340_stripped.h"
+//#include <SD.h>
+#include <SdFat.h>
+#include "pinmap.h"
+#include "NMEAGPS_cfg.h"
+#include "NMEAGPS.h"
+#include "MS5637Barometer.h"
+#include "MAX7313.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_ILI9340.h"
 #include "LibXBee.h"
-#include "config.h"
 #include "globals.h"
 #include "utils.h"
 
-// function definitions
-void xBeeFrameReceived();
-void printStatus(char *msg);
+#define FILE_NAME "DATALOG.TXT"
+
+SoftwareSerial Serial4(24, 25);
+/* Aliases for serial devices */
+#define USB_SER Serial
+#define XBEE_SER Serial1
+#define GSM_SER Serial2
+#define GPS_SER Serial3
+#define BT_SER Serial4
+
+static NMEAGPS gps;
+
+static gps_fix fix_data;
+
+static int currentVoltage = 0;
+
+void stuur(byte adres, byte reg, byte data){  // small hint: stuur = dutch for send
+   Wire.beginTransmission(adres);
+     Wire.send( reg);
+     Wire.send( data);
+    Wire.endTransmission();
+}
+
+void baroReset() {
+  Wire.beginTransmission(0xEC);
+    Wire.send(0x1E);
+  Wire.endTransmission();
+}
+
+Adafruit_ILI9340 tft = Adafruit_ILI9340(SPI1_CS, DISPLAY_DC, SPI1_RST);
+MS5637Barometer baroSensor;
+MAX7313 externalIO(0x20, IO_INT0);
 
 void setup() {
+  /* SETUP IO PINS */
+  // Set up pins for XBee Module
+  pinMode(XBEE_RESET, OUTPUT); // XBee reset pin
+  digitalWrite(XBEE_RESET, HIGH);
+  pinMode(XBEE_SLEEP, OUTPUT); // XBee sleep pin
+  digitalWrite(XBEE_SLEEP, HIGH);
   
-  pinMode(TFT_CS,OUTPUT);
-  digitalWrite(TFT_CS,HIGH);
-  pinMode(TFT_DC,OUTPUT);
-  digitalWrite(TFT_DC,HIGH);
-  pinMode(TFT_RST,OUTPUT);
-  digitalWrite(TFT_RST,HIGH);
+  // Set up pins for GSM module
+  pinMode(SIM900_PWR, OUTPUT); // Power pin
+  digitalWrite(SIM900_PWR, LOW);
+  pinMode(SIM900_RESET, OUTPUT); // Reset pin
+  digitalWrite(SIM900_RESET, LOW);
+  pinMode(SIM900_RI, INPUT); // Ring line
+  pinMode(SIM900_STATUS, INPUT); // Status pin
+
+  // Set up pins for GPS Module
+  pinMode(GPS_ONOFF, OUTPUT); // GPS start pulse
+  digitalWrite(GPS_ONOFF, LOW);
+  pinMode(GPS_TM, INPUT); // 1PPS Time mark
+  pinMode(GPS_WU, INPUT); // Wake up signal
+  pinMode(GPS_RST, OUTPUT);
+  digitalWrite(GPS_RST, HIGH); // GPS Reset
+
+  // Set up pins for Bluetooth Module
+  pinMode(BT_EN, OUTPUT); // Enable power on BT
+  digitalWrite(BT_EN, LOW);
+  pinMode(BT_CMD, OUTPUT); // Command mode BT
+  digitalWrite(BT_EN, LOW);
+
+  // Set up pins for TFT screen and card reader
+  pinMode(DISPLAY_DC, OUTPUT); // TFT Data/Command
+  digitalWrite(DISPLAY_DC, LOW);
+  pinMode(DISPLAY_SDCS, OUTPUT); // SD Card Chip select
+  digitalWrite(DISPLAY_SDCS, HIGH);
+  pinMode(SPI1_CS, OUTPUT); // TFT Chip select
+  digitalWrite(SPI1_CS, HIGH);
+  pinMode(DISPLAY_BL, OUTPUT); // TFT & buttons backlight
+  digitalWrite(DISPLAY_BL, LOW);
+
+  // Set up other IO Pins
+  pinMode(EN_12V, OUTPUT); // 12V boost converter startup
+  digitalWrite(EN_12V, LOW); // Disable on boot.
+  pinMode(BUZZER_ACT, OUTPUT); // Buzzer activation
+  digitalWrite(BUZZER_ACT, LOW); // Disable on boot.
+  pinMode(DISPLAY_BL, OUTPUT); //Backlight control
+
+  pinMode(IO_INT0, INPUT_PULLUP); // External interrupt pin
+  attachInterrupt(IO_INT0, intIoExpansor, CHANGE);
+
+  /* SETUP LOW LEVEL DEVICES */
+  // Enable USB debug serial port
+  USB_SER.begin(115200);
+  // Enable serial port for XBee Module
+  XBEE_SER.begin(9600);
+  // Enable serial port for SIM900 Module
+  //GSM_SER.begin(9600);
+  // Enable serial port for GPS
+  GPS_SER.begin(4800);
+
+  // Enable AltSoft serial port for Bluetooth
+  BT_SER.begin(38400);
+
+  // Enable SPI bus for TFT Display and SD Card
+  SPI.setMOSI(SPI1_MOSI);
+  SPI.setMISO(SPI1_MISO);
+  SPI.setSCK(SPI1_SCK);
+  SPI.begin();
+
+  // Enable I2C bus for other devices
+  Wire.begin();
   
-  /* BEGIN IO SETUP SECTION */
-  pinMode(BTN_A, INPUT_PULLUP);
-  pinMode(BTN_B, INPUT_PULLUP);
-  pinMode(BTN_C, INPUT_PULLUP);
-  pinMode(A2, INPUT_PULLUP);
+  /* SETUP HARDWARE-ABSTRACTED DEVICES  */
+
+  // Turn on backlight
+  analogWrite(DISPLAY_BL, 50);
+  tft.begin();
+
+  Serial.println("Starting barometric sensor");
+  // Baro/Temp sensor I2C setup
+  baroSensor.init();
+  baroSensor.setOSR(OSR_2048);
+  externalIO.init();
   
-  //pinMode(5, OUTPUT);
-  //digitalWrite(5, LOW);
-
-  //pinMode(13,OUTPUT);
-  //digitalWrite(13,HIGH);
-  /* END IO SETUP SECTION */
-
-  /* BEGIN TFT INIT SECTION */
-  tftInit();
-  /* END TFT INIT SECTION */
-
-  /* BEGIN SERIAL COMM SECTION */
-  //Serial.begin(9600);
-  Serial1.begin(COMM_BAUDRATE);
-  gpsSerial.begin(COMM_BAUDRATE);
-  /* END SERIAL COMM SECTION */
-
   /* BEGIN XBEE SECTION */
   myXBee = new XBee900HP(&Serial1);
   myXBee->onFrameReceived(xBeeFrameReceived);
   myXBee->init(); // Blocks execution until the Xbee has been correctly initialized
   /* END XBEE SECTION */
 
+  /* BEGIN TFT INIT SECTION */
+  tftInit();
+  initGPS();
+  /* END TFT INIT SECTION */
+
   /* BEGIN FLASHCARD INIT */
   //const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
   //char fileName[13] = FILE_BASE_NAME "00.csv";
-  if (!sd.begin(SD_CS, SPI_HALF_SPEED)) {
+  if (!sd.begin(DISPLAY_SDCS, SPI_HALF_SPEED)) {
     printStatus(F("ERR->"));
   }
   /*
@@ -115,37 +178,74 @@ void setup() {
   /* END INIT UI globals */
 }
 
+void intIoExpansor() {
+  // ISR for changes on IO Expansor board.
+}
+
+void selfMonitor() {
+  // Check battery voltaje level & estimated lifetime.
+}
+
+int currTest = 0;
+
+void printWait(int seconds) {
+  for(int i=0;i<seconds;i++) {
+    Serial.print(seconds-i,DEC);
+    Serial.print("\n");
+    delay(1000);
+  }
+}
+
+void sim900powerON() {
+  digitalWrite(SIM900_PWR,HIGH);
+  delay(1500);
+  digitalWrite(SIM900_PWR,LOW);
+  delay(3000);
+}
+
+void sim900powerOFF() {
+  digitalWrite(SIM900_PWR,HIGH);
+  delay(2500);
+  digitalWrite(SIM900_PWR,LOW);
+  delay(3000);
+}
 
 void loop() {
   myXBee->listen();
   
   // Monitor inputs
   if(
-      digitalRead(BTN_A)==LOW ||
-      digitalRead(BTN_B)==LOW ||
-      digitalRead(BTN_C)==LOW ||
-      digitalRead(A2)==LOW) {
-    noTone(3);
+      externalIO.digitalRead(BTN_A)==LOW ||
+      externalIO.digitalRead(BTN_B)==LOW ||
+      externalIO.digitalRead(BTN_C)==LOW ||
+      externalIO.digitalRead(BTN_D)==LOW) {
+    Serial.println("Button down");
     if(olderThan(timeoutA,BTN_TIMEOUT)) {
+      Serial.println("Sending message");
       if(digitalRead(BTN_A)==LOW) {
         broadcastAlert(0x00,0x01);
       } else if (digitalRead(BTN_B)==LOW){
         broadcastAlert(0x00,0x02);
       } else if (digitalRead(BTN_C)==LOW) {
         broadcastAlert(0x00,0x03);
-      } else if (digitalRead(A2)==LOW) {
+      } else if (digitalRead(BTN_D)==LOW) {
         broadcastAlert(0x00,0x04);
       }
       timeoutA = millis();
     }
+    digitalWrite(BUZZER_ACT, LOW);
+    delay(100);
+    digitalWrite(EN_12V, LOW); // Enable 12V power source
   } else {
     timeoutA = millis();
   }
 
-  if(gpsSerial.available()) {
-    gps.decode(gpsSerial.read());
+  if(GPS_SER.available()) {
+    uint8_t c = GPS_SER.read();
+    gps.decode(c);
     if(gps.fix().valid.location) {
-      tft.fillRect(0,290, 40, 30, ILI9340_BLACK);
+      Serial.println("GPS Fixed");
+      tft.fillRect(0,290, 40, 50, ILI9340_BLACK);
       tft.setTextColor(ILI9340_WHITE);
       tft.setTextSize(2);
       tft.setCursor(0, 200);
@@ -157,6 +257,18 @@ void loop() {
   // Clear status message if older than X seconds
   if(olderThan(lastStatus,5000)) {
     tft.fillRect(0,290, 240, 30, ILI9340_BLACK);
+  }
+}
+
+void initGPS() {
+  GPS_SER.setTimeout(10000);
+  if(GPS_SER.find("GPGGA")) {
+    Serial.println("GPS Data found");
+  } else {
+    Serial.println("NF _Trying to start GPS Unit");
+    digitalWrite(GPS_ONOFF,HIGH);
+    delay(500);
+    digitalWrite(GPS_ONOFF,LOW);
   }
 }
 
@@ -205,6 +317,7 @@ void broadcastAlert(uint8_t category,uint8_t level) {
   appendUINT8(gps.fix().dateTime.seconds);
   myXBee->sendTo64RAW(0x00000000,0x0000FFFF,xBeeData,xBeeBuffPos);
   printStatus(F("Trying to send"));
+  Serial.println("Trying to send");
 }
 
 
@@ -270,7 +383,9 @@ void xBeeFrameReceived() {
       
       tft.setTextSize(3);
       if((char)myXBee->rcvBuffer[14]==0x00) {
-        tone(3,2000);
+        digitalWrite(EN_12V, HIGH); // Enable 12V power source
+        delay(100); // Wait for power supply to estabilize itself
+        digitalWrite(BUZZER_ACT, HIGH);
         switch(myXBee->rcvBuffer[15]) {
           case 0x01:
             tft.setTextColor(ILI9340_GREEN);
@@ -317,7 +432,7 @@ void xBeeFrameReceived() {
       tft.print(F("m DE TI Y A "));
       tft.print(distance(lat,lon,139277359,-898317289),DEC);
       tft.print(F("m DE CM GETSEMANI.\n"));
-      digitalWrite(TFT_CS,HIGH);
+      digitalWrite(SPI1_CS,HIGH);
       // LOG MSG
       if(file_ready) file.write(&myXBee->rcvBuffer[12],myXBee->rcvSize);
       if(file_ready) file.write("CH\r\n");
