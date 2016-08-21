@@ -33,3 +33,8 @@ char *byteToHex(uint8_t d);
 bool olderThan(unsigned long time_t,unsigned long delay_t);
 
 int32_t distance(int32_t lat1, int32_t lon1, int32_t lat2, int32_t lon2);
+
+int32_t getHWId();
+
+uint8_t getHumanId(uint32_t my_id);
+

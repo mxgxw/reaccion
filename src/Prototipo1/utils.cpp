@@ -58,3 +58,17 @@ int32_t distance(int32_t lat1, int32_t lon1, int32_t lat2, int32_t lon2) {
   return (int32_t)(sqrt(x*x+y*y)*6371000);*/
 }
 
+int32_t getHWId() {
+  uint32_t my_id = 0;
+  my_id = SIM_UIDH^SIM_UIDMH;
+  my_id = my_id^SIM_UIDML;
+  my_id = my_id^SIM_UIDL;
+  return my_id;
+}
+
+uint8_t getHumanId(uint32_t my_id) {
+  return ((my_id>>24)&0xFF)^((my_id>>16)&0xFF)^((my_id>>8)&0xFF)^(my_id&0xFF);
+}
+
+
+

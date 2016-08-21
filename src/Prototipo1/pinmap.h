@@ -26,11 +26,14 @@
 /* BEGIN OTHER IO PIN SETUP */
 #define EN_12V            26
 #define BUZZER_ACT        23
+#define CHG_STAT          1
+#define PWR_STAT          0
 /* EXTERNAL INTERRUPTS */
 #define IO_INT0           32
-#define BTN_A             6
-#define BTN_B             7
-#define BTN_C             8
-#define BTN_D             9
+#define BTN_A             9
+#define BTN_B             8
+#define BTN_C             6
+#define BTN_D             7
 #define BTN_E             10
 #define BTN_F             11
+

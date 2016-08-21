@@ -232,7 +232,6 @@ void XBee900HP::listen() {
           this->rcvBuffer[this->rcvSize++] = this->d;
           this->checkSum += this->d; // Calculate Checksum on the fly
         } else {
-          Serial.print("\n");
           // Last byte is the checksum
           this->checkSum += this->d;
           this->checkSum = 0xFF & this->checkSum;
@@ -259,7 +258,7 @@ bool XBee900HP::waitFor(const char *response, void (*command)()) {
   
   boolean responseFound = false;
   
-  while((millis()-this->lastSerialData)<WAIT_TIMEOUT & !responseFound) {
+  while((millis()-this->lastSerialData)<WAIT_TIMEOUT && !responseFound) {
     while(this->_HardSerial->available()) {
       c = this->_HardSerial->read();
       this->append_buffer(c);
@@ -282,7 +281,7 @@ bool XBee900HP::waitFor(const char *response) {
   boolean responseFound = false;
   
   char c;
-  while((millis()-this->lastSerialData)<WAIT_TIMEOUT & !responseFound) {
+  while((millis()-this->lastSerialData)<WAIT_TIMEOUT && !responseFound) {
     while(this->_HardSerial->available()) {
       c = this->_HardSerial->read();
       this->append_buffer(c);
@@ -315,9 +314,9 @@ void XBee900HP::append_buffer(char c) {
 
 void XBee900HP::escapeAndWrite(uint8_t &data) {
   if(
-    data == 0x7E |
-    data == 0x7D |
-    data == 0x11 |
+    data == 0x7E ||
+    data == 0x7D ||
+    data == 0x11 ||
     data == 0x13
     ) {
     this->_HardSerial->write(0x7D);
@@ -326,3 +325,4 @@ void XBee900HP::escapeAndWrite(uint8_t &data) {
     this->_HardSerial->write(data);
   }
 }
+

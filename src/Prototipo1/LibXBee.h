@@ -48,7 +48,7 @@ private:
   
   uint8_t d; // Temporary holder for the data
   bool responseFound; // Flag to stop reading
-  uint8_t lMSB,lLSB; // Packet length (MSB,LSB)
+  uint16_t lMSB,lLSB; // Packet length (MSB,LSB)
   int packetSize; // Packet size built from the length
   int checkSum;
   uint32_t lastData;
@@ -70,4 +70,5 @@ private:
   
   bool escapeNext;
 };
+
 

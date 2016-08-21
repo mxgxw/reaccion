@@ -30,6 +30,13 @@ enum CONV_TYP {
 };
 
 class MS5637Barometer {
+public:
+  MS5637Barometer();
+  boolean init();
+  void setOSR(enum OSR sampling);
+  uint32_t readADC(enum CONV_TYP type,enum OSR sampling);
+  int32_t readTemperature();
+  int32_t readTCPressure();
 private:
   uint16_t PSENS;
   uint16_t POFFSET;
@@ -47,13 +54,7 @@ private:
   enum OSR oversampling;
   boolean device_available;
   uint16_t readEEPROM(uint8_t addr);
-public:
-  MS5637Barometer();
-  boolean init();
-  void setOSR(enum OSR sampling);
-  uint32_t readADC(enum CONV_TYP type,enum OSR sampling);
-  int32_t readTemperature();
-  int32_t readTCPressure();
 };
+
 
 

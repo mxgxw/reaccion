@@ -66,12 +66,13 @@ uint16_t MS5637Barometer::readEEPROM(uint8_t addr) {
  */
 uint32_t MS5637Barometer::readADC(enum CONV_TYP type,enum OSR sampling) {
   uint32_t value = 0;
-  uint32_t result;
   uint8_t cmd = 0x40;
+  
   cmd = cmd | (type<<4) | (sampling<<1);
   Wire.beginTransmission(0x76);
     Wire.send(cmd);
-  result = Wire.endTransmission();
+  
+  Wire.endTransmission();
   uint16_t wait_for_read = 0;
   
   switch(sampling) {
@@ -98,9 +99,9 @@ uint32_t MS5637Barometer::readADC(enum CONV_TYP type,enum OSR sampling) {
   
   Wire.beginTransmission(0x76);
     Wire.send(0x00);
-  result = Wire.endTransmission();
+  Wire.endTransmission();
   
-  uint8_t response = Wire.requestFrom(0x76,3);
+  Wire.requestFrom(0x76,3);
   while(Wire.available()) {
     value <<=8;
     value |= Wire.read();
@@ -126,6 +127,8 @@ boolean MS5637Barometer::init() {
   this->TREF = this->readEEPROM(5);
   this->TEMPSENS = this->readEEPROM(6);
   this->device_available = true;
+
+  return this->device_available;
 }
 
 /*
@@ -150,7 +153,7 @@ int32_t MS5637Barometer::readTemperature() {
 /*
  * Calculates the temperature-compensated pressure for
  * the sensor using the pre-defined accuracy.
- * OSR       Time-to-Convert(ms) Resolution(mbar) Resolution(Â°C)
+ * OSR       Time-to-Convert(ms) Resolution(mbar) Resolution(Ã‚Â°C)
  * OSR_256          0.54            0.110            0.012
  * OSR_512          1.06            0.062            0.009
  * OSR_1024         2.08             0.039            0.006
@@ -168,5 +171,6 @@ int32_t MS5637Barometer::readTCPressure() {
   this->TCP = (this->D1*(this->SENS/pow(2,21)) - this->AOFF)/pow(2,15);
   return this->TCP;
 }
+
 
 
