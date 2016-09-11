@@ -9,7 +9,7 @@
 #include "NMEAGPS.h"
 #include "MS5637Barometer.h"
 #include "MAX7313.h"
-#include "Adafruit_GFX.h"
+#include "Addafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
 #include "LibXBee.h"
 #include "data_frames.h"
@@ -763,6 +763,8 @@ void xBeeFrameReceived() {
         USB_SERIAL.println(proto_version, HEX);
 #endif
         switch(proto_version) {
+          case 0xFFFF: // BEGIN PROTOCOL 0xFFFF PARSING
+            break;
           case 0x00: // BEGIN PROTOCOL 0 PARSING
             if(myXBee->rcvSize==29) {
               digitalWrite(EN_12V, HIGH); // Enable 12V power source
