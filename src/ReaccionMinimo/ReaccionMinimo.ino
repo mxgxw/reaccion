@@ -79,7 +79,7 @@ Button btn4(BTN_4);
 // Helpers
 Interval interval5s(2000);
 MicroMesh mesh(&driver, rcv_buf, rcv_buf_len, EEPROM_BASE_ADDR+sizeof(node_id));
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, HEARTBEAT, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, HEARTBEAT, NEO_RGB + NEO_KHZ800);
 Heartbeat heart(&pixels);
 /************************** END DRIVERS ***************************/
 
