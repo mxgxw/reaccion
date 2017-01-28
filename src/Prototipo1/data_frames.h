@@ -28,17 +28,4 @@ typedef struct rx_frame_protocol_1{
   uint32_t running;
 };
 
-typedef struct rx_shared_key_change_req {
-  uint16_t version = 0xFFFF;
-  uint16_t version = 0x0000;
-  uint8_t shared_key[20];
-};
-
-typedef struct rx_gw_broadcast_announce {
-  uint16_t version = 0xFFFF;
-  uint16_t version = 0x0001;
-  uint32_t addr_high = 0x0001;
-  uint32_t addr_low = 0x0001;
-};
-
 

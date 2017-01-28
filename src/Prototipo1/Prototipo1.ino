@@ -9,7 +9,7 @@
 #include "NMEAGPS.h"
 #include "MS5637Barometer.h"
 #include "MAX7313.h"
-#include "Addafruit_GFX.h"
+#include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
 #include "LibXBee.h"
 #include "data_frames.h"
@@ -849,38 +849,8 @@ void xBeeFrameReceived() {
               drawQueue();
             }
             break; // END PROTOCOL 1 PARSING
-          case 0xFF: // BEGIN CHANGE KEY CONFIGURATION
-            if(myXBee->rcvSize==52) {
-              rx_shared_key_change_req req_key;
+          case 0xFF: // TODO: BEGIN CHANGE KEY CONFIGURATION
 
-              // fill structure with data received
-              memcpy(&req_key,myXBee->rcvBuffer+RX_FRAME_OFFSET,sizeof(rx_shared_key_change_req));
-
-              // Generate a placeholder for the received data
-              rx_shared_key_change_req cur_key;
-              memcpy(cur_key.shared_key, req_key.shared_key, sizeof(SHARED_KEY_SIZE));
-
-              // Store the hash from received key
-              uint8_t newkey_hash[20];
-              memcpy(newkey_hash,myXBee->rcvBuffer+RX_FRAME_OFFSET+sizeof(rx_shared_key_change_req), sizeof(SHARED_KEY_SIZE));
-
-              uint8_t oldkey_hash[20];
-              mbedtls_sha1_starts(&sha1_context);
-              mbedtls_sha1_update(&sha1_context,(uint8_t*)&req_key,sizeof(req_key));
-              mbedtls_sha1_update(&sha1_context,(uint8_t*)&shared_key,sizeof(SHARED_KEY_SIZE));
-              mbedtls_sha1_finish(&sha1_context,oldkey_hash);
-              mbedtls_sha1_free(&sha1_context);
-              // Generate hash with the old key
-
-              // Verify that the new key hash corresponds to the original key
-              if(equalSHA1(newkey_hash,oldkey_hash)) {
-                // Update the internal key in non volatile memory.
-                setSharedKey(req_key.shared_key);
-                memcpy(shared_key, req_key.shared_key, sizeof(SHARED_KEY_SIZE));
-              } else {
-                // TODO: Ignore key & blacklist origin
-              }
-            }
             break; // END CHANGE SHARED KEY
           default:
             printStatus(("Protocol not supported"), ILI9340_RED);
